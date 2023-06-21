@@ -1,0 +1,9 @@
+const path = require('path');
+
+// SQL CLI dùng để tạo model cho chúng ta -> tìm đến model
+module.exports = {
+  'config': path.resolve('./src/config', 'config.json'), // làm sao để có thể kết nối được DB
+  'migrations-path': path.resolve('./src', 'migrations'),  // dùng câu lệnh ở terminal để tạo DB
+  'models-path': path.resolve('./src', 'models'), // SQL CLI dùng để tạo model cho chúng ta -> tìm đến model
+  'seeders-path': path.resolve('./src', 'seeders') // tự tạo ra dữ liệu fake cho mình
+}

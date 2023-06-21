@@ -1,3 +1,14 @@
 // dùng babel version này
 npm i --save-dev @babel/preset-env@7.12.10 @babel/node@7.12.10 nodemon@2.0.7
 npm install --save body-parser@1.19.0 dotenv@8.2.0 ejs@3.1.5 express@4.17.1
+//
+cd : Change directory
+
+
+npm install --save-dev sequelize-cli@6.2.0
+
+// tạo mới .sequelizerc (dùng để làm đường dẫn )  để khi cài sequelize CLI thì nó sẽ biết đường dẫn dẫn tới đâu để cấu hình
+ +1 , tìm ra config để tìm đường dẫn DB
+ +  , model để tự tạo ra models DB
+ +  , seeder dùng để tạo ra 1 fake DB
+ +  , migrations dùng để tạo ra các bảng trong DB (k cẩn phải dùng create table.. trong SQL)

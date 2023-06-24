@@ -1,0 +1,9 @@
+File migration trong SQL CLI được sử dụng để quản lý phiên bản của cơ sở dữ liệu. Nó chứa các tác vụ tạo và xóa bảng, chỉnh sửa cấu trúc của bảng, và thực hiện các thay đổi khác trong cơ sở dữ liệu.
+
+Trong file migration của bạn, có hai phương thức quan trọng: up và down.
+
+Phương thức up được sử dụng để thực hiện các thao tác tạo bảng và cấu trúc của bảng. Trong trường hợp này, nó sử dụng queryInterface.createTable để tạo bảng "Users" với các cột như "id", "firstName", "lastName", "email", "createdAt", và "updatedAt". Các kiểu dữ liệu của các cột được xác định bằng Sequelize.
+
+Phương thức down được sử dụng để thực hiện các thao tác xóa bảng và quay lại trạng thái trước khi migration được áp dụng. Trong trường hợp này, nó sử dụng queryInterface.dropTable để xóa bảng "Users".
+
+Khi chạy migration, SQL CLI sẽ sử dụng các phương thức up và down trong file migration để thực hiện các thay đổi trong cơ sở dữ liệu. Ví dụ, khi bạn chạy lệnh npx sequelize-cli db:migrate, SQL CLI sẽ thực hiện phương thức up để tạo bảng "Users". Khi bạn chạy lệnh npx sequelize-cli db:migrate:undo, SQL CLI sẽ thực hiện phương thức down để xóa bảng "Users" và quay lại trạng thái trước đó của cơ sở dữ liệu.

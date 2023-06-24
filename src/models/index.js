@@ -9,12 +9,13 @@ const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
 
 let sequelize;
+// if(...) dùng để tham chiếu tới tài khoản và kết nối với SQL CLI ở file config
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
-
+// fs này dùng để tìm tất cả các file .js như kiểu tạo ra các cột dữ liệu
 fs
   .readdirSync(__dirname)
   .filter(file => {
@@ -24,6 +25,8 @@ fs
     const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
     db[model.name] = model;
   });
+
+// Object này dùng để kết nối các key (chân gà - quan hệ dữ liệu) giữa các cột với nhau
 
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {

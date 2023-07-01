@@ -18,27 +18,7 @@ let getAboutPage = (req, res) => {
 let getCRUD = (req, res) => {
   return res.render("CRUD.ejs");
 };
-
-// let postCRUD = async (req, res) => {
-//   return new Promise(async(resolve , reject)=>{
-//     try {
-//         let messgae = await CRUDServices.createNewUser(req.body);
-    
-//         console.log(messgae);
-//         resolve('thanh cong');
-//         return res.send("POST - CRUD.ejs");
-
-//       } catch (error) {
-//             reject(error)
-//       }
-
-//   } );
-// };
-// let postCRUD = async (req, res) => {
-//     let message = await CRUDServices.createNewUser(req.body)
-//     console.log(message)
-//     return res.send('post crud from server')
-// }
+ 
 let postCRUD = async (req, res) => {
     try {
         let message = await CRUDServices.createNewUser(req.body);
@@ -50,14 +30,44 @@ let postCRUD = async (req, res) => {
     }
 }
 
+let getUsers = async(req,res)=>{
+  let allUsers = await CRUDServices.getUsers();
 
-// object: {
-//     key: '',
-//     value: ''
-// }
+  console.log('---------+++++------------');
+  console.log(allUsers);
+  console.log('---------+++++------------');
+  return res.render('displayCRUD.ejs',{
+    dataTable:allUsers
+  })
+}
+let getEditCRUD = async(req,res)=>{
+  let userId = req.query.id ;
+  if(userId){
+    let userData = await CRUDServices.getUserInfoById(userId);
+    return res.render('editCRUD.ejs',{user : userData});
+  }else{
+    return res.send('khong tim thay user')
+  }
+}
+
+
+let putCRUD = async(req,res)=>{
+  let data = req.body ;
+  let allUsers = await CRUDServices.updateUserData(data)
+
+  return res.render('displayCRUD.ejs', {
+      dataTable: allUsers 
+  })
+}
+
 module.exports = {
   getHomePage: getHomePage,
   getAboutPage: getAboutPage,
   getCRUD: getCRUD,
   postCRUD: postCRUD,
+  getUsers : getUsers,
+  getEditCRUD :getEditCRUD,
+  putCRUD : putCRUD ,
+
+
 };

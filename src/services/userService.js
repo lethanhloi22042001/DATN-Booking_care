@@ -52,6 +52,9 @@ let handleUserLogin = (email, password) => {
   });
 };
 
+
+ 
+
 let checkUserEmail = (email) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -67,31 +70,7 @@ let checkUserEmail = (email) => {
       reject(error);
     }
   });
-};
-
-// let getAllUsers = async (userId) => {
-//   return new Promise(async (resolve, reject) => {
-//     try {
-//       let user = "";
-//       if (userId === "All") {
-//         user = await db.User.findAll({
-//           attributes: { exclude: ["password"] },
-//         });
-//       }
-
-//       if (userId && userId !== "All") {
-//         user = await db.User.findOne({
-//             where : {id : userId.id} ,
-//           attributes: { exclude: ["password"] },
-//         });
-//       }
-
-//       resolve(user);
-//     } catch (error) {
-//       reject(error);
-//     }
-//   });
-// };
+}; 
 
 let getAllUsers = (userId) => {
     return new Promise(async (resolve, reject) => {
@@ -119,7 +98,125 @@ let getAllUsers = (userId) => {
     })
 }
 
+
+let hashUserPassword = (password) => {
+    return new Promise(async (resole, reject) => {
+        try {
+            var hashPassword = await bcrypt.hashSync(password, salt);
+            resole(hashPassword)
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+
+
+let createNewUser = (data)=>{
+    return new Promise( async(resolve , reject)=>{
+        try {
+            let isEmail = await checkUserEmail(data.email) ; 
+            console.log('This is is',isEmail);
+
+            if(isEmail){
+                resolve({
+                    errCode : 1, 
+                    message : 'Plz try another Email because this email is already yet :V'
+                });
+            }
+            
+            if(!isEmail){
+                    let hashPasswordFromBcrypt = await hashUserPassword(data.password) ;
+                    let newUser = await db.User.create({
+                    email: data.email,
+                    password: hashPasswordFromBcrypt,
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    address: data.address,
+                    phonenumber: data.phonenumber,
+                    gender: data.gender === '1' ? true : false,
+                    roleId: data.roleId,
+            });
+                resolve(newUser);
+            }
+        } catch (error) {
+            reject(error)
+        }
+ 
+    } );
+}
+
+let deleteUser = (userId) => {
+  return new Promise(async (resolve, reject) => {
+      let foundUser = await db.User.findOne({
+          where: { id: userId }
+      })
+      if (!foundUser) {
+          resolve({
+              errCode: 2,
+              errMessage: 'The user is not exist'
+          })
+      }
+
+      await db.User.destroy({
+          where: { id: userId }
+      })
+
+      resolve({
+          errCode: 0,
+          message: 'User is deleted'
+      })
+  })
+}
+
+let updateUserData = (data) => {
+  return new Promise(async (resolve, reject) => {
+      try {
+          if (!data.id || !data.roleId || !data.positionId || !data.gender) {
+              resolve({
+                  errCode: 2,
+                  message: 'Missing required parameters!'
+              })
+          }
+          let user = await db.User.findOne({
+              where: { id: data.id },
+              raw: false
+          })
+          if (user) {
+              user.firstName = data.firstName
+              user.lastName = data.lastName
+              user.address = data.address
+              user.roleId = data.roleId
+              user.positionId = data.positionId
+              user.gender = data.gender
+              user.phonenumber = data.phonenumber
+              if(data.avatar) {
+                  user.image = data.avatar
+              }
+
+              await user.save()
+
+              resolve({
+                  errCode: 0,
+                  message: 'Update user success!'
+              })
+          } else {
+              resolve({
+                  errCode: 1,
+                  errMessage: 'User not found!'
+              })
+          }
+      } catch (e) {
+          reject(e)
+      }
+  })
+}
+
 module.exports = {
   handleUserLogin: handleUserLogin,
   getAllUsers: getAllUsers,
+  createNewUser : createNewUser ,
+  deleteUser : deleteUser ,
+  updateUserData : updateUserData,
+  
 };

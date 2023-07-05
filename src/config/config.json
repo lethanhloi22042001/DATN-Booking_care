@@ -5,7 +5,6 @@
     "database": "doantotnghiep",
     "host": "127.0.0.1",
     "dialect": "mysql",
-    "query": { "raw": true },
     "timezone": "+07:00"
   },
   "test": {

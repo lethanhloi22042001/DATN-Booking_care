@@ -110,7 +110,7 @@ let createNewUser = (data) => {
                     errMessage: 'Your email is already in used, Please try another email!'
                 })
             } else {
-              console.log("IMG Da vao day ", data.avatar);
+
                 let hashPasswordFromBcrypt = await hashUserPassword(data.password)
                 await db.User.create({
                     email: data.email,
@@ -122,7 +122,7 @@ let createNewUser = (data) => {
                     gender: data.gender,
                     roleId: data.roleId,
                     positionId: data.positionId,
-                    // image: data.avatar
+                    image: data.avatar
                 })
                 resolve({
                     errCode: 0,

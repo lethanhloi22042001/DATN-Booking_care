@@ -48,8 +48,66 @@ let getAllDoctorSV = () => {
         }
     })
 }
+//saveDetailInfoDoctor
+let saveDetailInfoDoctor = (inputdata) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if(!inputdata){
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing Parametter'
+                })
+            }else{
+                await db.Markdown.create({
+                    contentHTML : inputdata.contentHTML,
+                    contentMarkdown : inputdata.contentMarkdown,
+                    description : inputdata.description ,
+                    doctorId : inputdata.doctorId,
+                });
+                
+                resolve({
+                    errCode: 0,
+                   errMessage: 'Ok'
+                })
+            }
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+//getDoctorInf
+
+let getDoctorInf = (doctorId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let users = await db.User.findOne({
+                where: { id: doctorId },
+                attributes: {
+                    exclude: ['password','image']
+                },
+                include: [
+                    { model: db.Markdown, attributes: ['contentHTML', 'contentMarkdown','description','doctorId','specialtyId'] },
+                    { model: db.Allcode, as: 'genderData', attributes: ['valueEn', 'valueVi'] },
+                ],
+                raw: true,
+                nest: true
+            })
+
+            resolve({
+                errCode: 0,
+                data: users
+            })
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 module.exports = {
     getTopDoctorHome: getTopDoctorHome,
     getAllDoctorSV : getAllDoctorSV ,
-     
+    saveDetailInfoDoctor:saveDetailInfoDoctor,
+    getDoctorInf : getDoctorInf,
+
+
 }

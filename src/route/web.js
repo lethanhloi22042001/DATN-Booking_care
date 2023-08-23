@@ -23,10 +23,12 @@ let initWebRoutes = (app) => {
   router.put('/api/edit-user', userController.handleEditUser)
   router.delete('/api/delete-user', userController.handleDeleteUser)
   router.get('/api/getallcode', userController.getAllCode)
-  // router.get('/api/getallcodes', userController.getAllCodes)
+
 
   router.get('/api/top-doctor-home', doctorController.getTopDoctorHome)
   router.get('/api/getAllDoctor', doctorController.getAllDoctor)
+  router.post('/api/save-info-doctor', doctorController.postInfoDoctor)
+  router.get('/api/get-detail-doctor-by-id', doctorController.getDetailDoctorById)
 
 
   return app.use("/", router);

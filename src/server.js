@@ -7,6 +7,8 @@ import cors from 'cors' ;
 // Lấy DB
 import connectDb from './config/connectDB'
 require('dotenv').config();
+const ports = process.env.PORT;
+
 
 let app = express();
 app.use(cors({ credentials: true, origin: true }))
